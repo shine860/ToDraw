@@ -8,6 +8,7 @@ project(ToDraw VERSION 0.1 LANGUAGES CXX)
 set(QT_QML_GENERATE_QMLLS_INI ON)
 
 find_package(Qt6 REQUIRED COMPONENTS Quick)
+find_package(Qt6 REQUIRED COMPONENTS CanvasPainter)
 qt_standard_project_setup(REQUIRES 6.11)
 
 qt_add_executable(appToDraw  WIN32)
