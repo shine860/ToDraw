@@ -7,21 +7,36 @@ set(CMAKE_CXX_MODULE_STD ON)
 project(ToDraw VERSION 0.1 LANGUAGES CXX)
 set(QT_QML_GENERATE_QMLLS_INI ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Quick)
-find_package(Qt6 REQUIRED COMPONENTS CanvasPainter)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick Quick3D Graphs CanvasPainter)
+# find_package(Python REQUIRED COMPONENTS Interpreter Development)
 qt_standard_project_setup(REQUIRES 6.11)
 
 qt_add_executable(appToDraw  WIN32)
 qt_add_qml_module(appToDraw
-    URI ToDraw
+    URI MyModule
     VERSION 1.0
     SOURCES     main.cpp
-    QML_FILES   Main.qml
+    QML_FILES   Window.qml
+    SOURCES my2dcanvas.h my2dcanvas.cpp
+    SOURCES my2dcanvasrenderer.h my2dcanvasrenderer.cpp
+    QML_FILES
+    QML_FILES Content.qml
+    QML_FILES
+    QML_FILES
+    QML_FILES
+    QML_FILES
+    QML_FILES
 )
 target_compile_features(appToDraw PRIVATE cxx_std_23)
-target_link_libraries(appToDraw
-    PRIVATE Qt6::Quick
+target_link_libraries(appToDraw PRIVATE
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Quick
+    Qt6::Quick3D
+    Qt6::Graphs
+    Qt6::CanvasPainter
 )
+# target_link_libraries(appToDraw PRIVATE Python::Python)
 
 set(CMAKE_INSTALL_PREFIX "/opt/${PROJECT_NAME}" CACHE PATH "Install path prefix" FORCE)
 install(TARGETS appToDraw
