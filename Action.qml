@@ -9,6 +9,7 @@ Item {
     property alias exitAction:_exitAction
     property alias undoAction:_undoAction
     property alias redoAction:_redoAction
+    property alias aboutAction: _aboutAction
 
     Action {
         id: _newAction
@@ -37,7 +38,6 @@ Item {
         shortcut: "Ctrl+E"
         icon.name: "document-export"
     }
-
     Action {
         id: _exitAction
         text: qsTr("&Exit")
@@ -52,11 +52,15 @@ Item {
         shortcut: "Ctrl+Z"
         icon.name: "edit-undo"
     }
-
     Action {
         id: _redoAction
         text:qsTr("Redo")
         shortcut: "Ctrl+Y"
         icon.name: "edit-redo"
+    }
+    Action {
+        id: _aboutAction
+        text: qsTr("&About")
+        icon.name: "help-about"
     }
 }
