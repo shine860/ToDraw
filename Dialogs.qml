@@ -1,3 +1,8 @@
+// Module
+// File: Dialogs.qml   Version: 0.1.0   License: AGPLv3
+// Created:huangyulin       2026-06-22 08:40:32
+// Description:将所有dialog放在一起，方便后续修改
+//
 import QtQuick
 import QtCore
 import QtQuick.Controls

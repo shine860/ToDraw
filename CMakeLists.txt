@@ -16,7 +16,8 @@ qt_add_qml_module(appToDraw
     VERSION 1.0
     SOURCES     main.cpp
     QML_FILES
-    QML_FILES Dialog.qml
+    QML_FILES Dialogs.qml
+    QML_FILES calculator.js
 )
 target_compile_features(appToDraw PRIVATE cxx_std_23)
 target_link_libraries(appToDraw
