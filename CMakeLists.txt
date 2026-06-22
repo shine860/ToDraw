@@ -16,7 +16,7 @@ qt_add_qml_module(appToDraw
     VERSION 1.0
     SOURCES     main.cpp
     QML_FILES   Main.qml
-    QML_FILES Action.qml
+    QML_FILES Actions.qml
 )
 target_compile_features(appToDraw PRIVATE cxx_std_23)
 target_link_libraries(appToDraw
