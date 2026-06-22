@@ -15,6 +15,7 @@ qt_add_executable(appToDraw  WIN32)
 qt_add_qml_module(appToDraw
     URI MyModule
     VERSION 1.0
+
     SOURCES  main.cpp
 
     QML_FILES   Window.qml
@@ -22,10 +23,10 @@ qt_add_qml_module(appToDraw
     SOURCES my2dcanvasrenderer.h my2dcanvasrenderer.cpp
 
     QML_FILES Content.qml
-    QML_FILES Dialog.qml
 
     QML_FILES Action.qml
-
+    QML_FILES Dialogs.qml
+    QML_FILES calculator.js
 )
 target_compile_features(appToDraw PRIVATE cxx_std_23)
 target_link_libraries(appToDraw PRIVATE
