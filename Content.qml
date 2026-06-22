@@ -1,3 +1,6 @@
+// File: Content.qml
+// Created: suqian2024051604029 3236863614@qq.com      2026-06-22
+// Version: 1.0      License: AGPLv3
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts

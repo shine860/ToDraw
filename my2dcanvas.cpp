@@ -1,3 +1,7 @@
+// File: my2dcanvas.cpp
+// Created: suqian2024051604029 3236863614@qq.com      2026-06-22
+// Version: 1.0      License: AGPLv3
+
 #include "my2dcanvas.h"
 #include "my2dcanvasrenderer.h"
 
