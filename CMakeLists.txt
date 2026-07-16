@@ -19,6 +19,7 @@ qt_add_qml_module(appToDraw
     QML_FILES Dialogs.qml
     QML_FILES calculator.js
     SOURCES my2dcanvas.h my2dcanvas.cpp
+    SOURCES my2dcanvasrenderer.h my2dcanvasrenderer.cpp
 )
 target_compile_features(appToDraw PRIVATE cxx_std_23)
 target_link_libraries(appToDraw
