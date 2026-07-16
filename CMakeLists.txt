@@ -15,7 +15,6 @@ qt_add_qml_module(appToDraw
     SOURCES     main.cpp
     SOURCES my2dcanvas.h my2dcanvasrenderer.h
     SOURCES my2dcanvas.cpp my2dcanvasrenderer.cpp
-    # SOURCES "src/expressionhelper.h" "src/expressionhelper.cpp"
     IMPORT_PATH "/usr/lib/qt6/qml"
     IMPORT_PATH "/usr/lib/qt6/qml/org/kde/analitza"
     QML_FILES
@@ -24,10 +23,9 @@ qt_add_qml_module(appToDraw
         Dialogs.qml
         Window.qml
         calculator.js
-
+        Graph3DViewWrapper.qml
+        todraw.js
     NO_IMPORT_SCAN
-    QML_FILES Graph3DViewWrapper.qml
-    QML_FILES todraw.js
 
 )
 
