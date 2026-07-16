@@ -6,6 +6,8 @@
 // Change Log:
 //     [v0.1.1]  黄钰琳2024051604104 <389930006@qq.com>   2026-07-16 01:47:21
 //         * 主要是添加和完善了2d绘制矢量场的功能，有相关的数据和信号
+//     [v0.1.2] lilin2024051604098，2293779871@qq.com   2026-07-16 15:26:52
+//         *  完善加修改
 #include <QtCanvasPainter>
 #include <QCanvasPainterItem>
 #include <QtQml/qqmlregistration.h>

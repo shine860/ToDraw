@@ -6,6 +6,8 @@
 // Change Log:
 //     [v0.1.2]  黄钰琳2024051604104 <389930006@qq.com>   2026-07-16 02:14:53
 //         * 完善了矢量场相关的部分
+//     [v0.1.2] lilin2024051604098，2293779871@qq.com    2026-07-16 15:29:12
+//         * 有给一些相关改进以及测试意见
 #include <QtCanvasPainter>
 #include <QCanvasPainterItemRenderer>
 #include "my2dcanvas.h"
