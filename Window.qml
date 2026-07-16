@@ -1,11 +1,14 @@
 // File: Window.qml
-// Created: suqian2024051604029 3236863614@qq.com      2026-06-22
+// Created: suqian2024051604029 3236863614@qq.com      2026-07-16
 // Version: 1.0      License: AGPLv3
-
+// Change Log:
+//     [v0.1.1] suqian2024051604029 3236863614@qq.com   2026-07-16 02:19:18
+//         * 完善window.qml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
 import QtQuick.Window
+import "todraw.js" as Controller
 
 ApplicationWindow {
     id: mainView
@@ -14,47 +17,44 @@ ApplicationWindow {
     visible: true
     title: "ToDraw-GeoGebra"
 
+    property alias content: content
     menuBar: MenuBar {
         Menu {
             title: "&File"
-            MenuItem { action: actions.newAction }
-            MenuItem { action: actions.openAction }
-            MenuItem { action: actions.saveAction }
-            MenuSeparator {}
             MenuItem { action: actions.exportAction }
             MenuSeparator {}
             MenuItem { action: actions.exitAction }
         }
         Menu {
-            title: "&Edit"
-            MenuItem { action: actions.undoAction }
-            MenuSeparator {}
-            MenuItem { action: actions.redoAction }
-
-        }
-        Menu {
             title: "&Help"
-            MenuItem { text: "About"; onTriggered: aboutDialog.open() }
+            MenuItem { text: "About"; onTriggered: content.dialogs.about.open() }
         }
     }
-    Actions{
-        id:actions
-        // open.onTriggered: Controller.open();
-        // aboutDialog.onTriggered: content.dialogs.about.open()
-    }
+
     header: ToolBar {
         RowLayout{
-            ToolButton{ action: actions.newAction }
-            ToolButton{ action: actions.openAction }
-            ToolButton{ action: actions.saveAction }
             ToolButton{ action: actions.exportAction }
-            ToolButton{ action: actions.exitAction }
-            ToolButton{ action: actions.undoAction }
-            ToolButton{ action: actions.redoAction }
+            ToolButton{ action:actions.aboutAction }
         }
     }
+
+
+    Actions{
+        id:actions
+        exportAction.onTriggered: {
+            Controller.exportToImage()
+        }
+        aboutAction.onTriggered: {
+            Controller.showAbout()
+        }
+    }
+
     Content{
         id:content
         anchors.fill: parent
+    }
+
+    Component.onCompleted: {
+        Controller.initial()
     }
 }

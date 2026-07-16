@@ -1,7 +1,13 @@
 // File: my2dcanvas.cpp
-// Created: suqian2024051604029 3236863614@qq.com      2026-06-22
+// Created: suqian2024051604029 3236863614@qq.com      2026-07-16
 // Version: 1.0      License: AGPLv3
-
+//     [v0.1.1] suqian2024051604029 3236863614@qq.com   2026-07-16 02:14:30
+//         * 完善了基础的2dcanvas部分
+// Change Log:
+//     [v0.1.2]  黄钰琳2024051604104 <389930006@qq.com>   2026-07-16 02:14:53
+//         * 完善了矢量场相关的部分
+#include <QtCanvasPainter>
+#include <QCanvasPainterItemRenderer>
 #include "my2dcanvas.h"
 #include "my2dcanvasrenderer.h"
 
@@ -14,23 +20,54 @@ QCanvasPainterItemRenderer *My2DCanvas::createItemRenderer() const
     return new My2DCanvasRenderer();
 }
 
+void My2DCanvas::setMultiFunctionData(const QVariantList &functionsData)
+{
+    m_multiFunctionData = functionsData;
+    update();
+}
 
+QVariantList My2DCanvas::multiFunctionData() const
+{
+    return m_multiFunctionData;
+}
+
+void My2DCanvas::setVectorFieldData(const QVariantList &vectorData)
+{
+    m_vectorFieldData = vectorData;
+    update();
+}
+
+QVariantList My2DCanvas::vectorFieldData() const
+{
+    return m_vectorFieldData;
+}
+bool My2DCanvas::showVectorField() const
+{
+    return m_showVectorField;
+}
+
+void My2DCanvas::setShowVectorField(bool newShowVectorField)
+{
+    if (m_showVectorField == newShowVectorField) return;
+    m_showVectorField = newShowVectorField;
+    emit showVectorFieldChanged();
+}
 
 void My2DCanvas::zoomIn()
 {
-    double cx = (m_xMin + m_xMax) / 2;
+    double cx=(m_xMin + m_xMax) / 2;
     double cy = (m_yMin + m_yMax) / 2;
     double xRange = (m_xMax - m_xMin) * 0.8;
     double yRange = (m_yMax - m_yMin) * 0.8;
 
-    if (xRange < MIN_RANGE || yRange < MIN_RANGE) {
+    if(xRange < MIN_RANGE || yRange < MIN_RANGE){
         return;
     }
 
-    if (xRange > MAX_RANGE) {
+    if(xRange > MAX_RANGE){
         xRange = MAX_RANGE;
     }
-    if (yRange > MAX_RANGE) {
+    if(yRange > MAX_RANGE){
         yRange = MAX_RANGE;
     }
     setXMin(cx - xRange / 2);
@@ -46,17 +83,17 @@ void My2DCanvas::zoomOut()
     double xRange = (m_xMax - m_xMin) * 1.25;
     double yRange = (m_yMax - m_yMin) * 1.25;
 
-    if (xRange > MAX_RANGE) {
-        xRange = MAX_RANGE;
+    if(xRange>MAX_RANGE){
+        xRange=MAX_RANGE;
     }
-    if (yRange > MAX_RANGE) {
-        yRange = MAX_RANGE;
+    if (yRange>MAX_RANGE) {
+        yRange=MAX_RANGE;
     }
 
-    setXMin(cx - xRange / 2);
-    setXMax(cx + xRange / 2);
-    setYMin(cy - yRange / 2);
-    setYMax(cy + yRange / 2);
+    setXMin(cx-xRange/2);
+    setXMax(cx+xRange/2);
+    setYMin(cy-yRange/2);
+    setYMax(cy+yRange/2);
 }
 
 void My2DCanvas::resetView()
@@ -65,15 +102,6 @@ void My2DCanvas::resetView()
     setXMax(5);
     setYMin(-5);
     setYMax(5);
-}
-void My2DCanvas::setMultiFunctionData(const QList<QVariant> &functionsData)
-{
-    m_multiFunctionData = functionsData;
-    update();
-}
-QList<QVariant> My2DCanvas::multiFunctionData() const
-{
-    return m_multiFunctionData;
 }
 
 double My2DCanvas::xMax() const { return m_xMax; }

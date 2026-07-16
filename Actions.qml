@@ -1,3 +1,8 @@
+// File: Actions.qml
+// Created: lilin2024051604098，2293779871@qq.com      2026-07-16
+// Version: 1.0      License: AGPLv3
+//     [v0.1.2] lilin2024051604098，2293779871@qq.com   2026-07-16 01:56:49
+//         * 完善了最开始想要实现的各个行为
 import QtQuick
 import QtQuick.Controls
 
