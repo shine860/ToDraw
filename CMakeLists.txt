@@ -38,4 +38,6 @@ target_sources(appToDraw
     PRIVATE FILE_SET cxx_modules TYPE CXX_MODULES
         BASE_DIRS   ${CMAKE_CURRENT_SOURCE_DIR}
         FILES  ${TODRAW_MODULE_FILES}
+        Graph3DViewWrapper.qml
+        Content.qml
 )
