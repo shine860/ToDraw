@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 4.2.3)
-set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
-# cmake_minimum_required(VERSION 4.3.2)
-# set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "451f2fe2-a8a2-47c3-bc32-94786d8fc91b")
+# cmake_minimum_required(VERSION 4.2.3)
+# set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "d0edc3af-4c50-42ea-a356-e2862fe7a444")
+cmake_minimum_required(VERSION 4.3.2)
+set(CMAKE_EXPERIMENTAL_CXX_IMPORT_STD "451f2fe2-a8a2-47c3-bc32-94786d8fc91b")
 set(CMAKE_CXX_MODULE_STD ON)
 
 project(ToDraw VERSION 0.1 LANGUAGES CXX)
@@ -18,6 +18,7 @@ qt_add_qml_module(appToDraw
     QML_FILES
     QML_FILES Dialogs.qml
     QML_FILES calculator.js
+    SOURCES my2dcanvas.h my2dcanvas.cpp
 )
 target_compile_features(appToDraw PRIVATE cxx_std_23)
 target_link_libraries(appToDraw
