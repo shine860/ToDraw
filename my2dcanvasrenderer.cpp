@@ -6,9 +6,6 @@
 //         * 完善了基础的渲染器
 //     [v0.1.2]  黄钰琳2024051604104 <389930006@qq.com>   2026-07-16 02:16:06
 //         * 完善2d矢量场相关的绘画功能
-// Change Log:
-//     [v0.1.3] lilin2024051604098，2293779871@qq.com    2026-07-16 15:29:43
-//         * 测试和改进
 #include "my2dcanvasrenderer.h"
 #include "my2dcanvas.h"
 #include <QString>

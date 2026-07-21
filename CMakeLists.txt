@@ -26,6 +26,7 @@ qt_add_qml_module(appToDraw
         Graph3DViewWrapper.qml
         todraw.js
     NO_IMPORT_SCAN
+    QML_FILES vector3d.js
 
 )
 

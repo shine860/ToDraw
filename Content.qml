@@ -9,6 +9,9 @@
 // Change Log:
 //     [v0.1.1] lilin2024051604098，2293779871@qq.com   2026-07-16 02:02:29
 //         * 主要是完善了3d的画图功能，因为这里引用了第三方库，矢量场我们暂时确实没有找到办法来画三维场中的箭头
+//     [v0.1.3]
+//         *大家一起新增3D矢量场叠加功能，在3D视图上叠加矢量场箭头，但是目前不在一个平面。
+//         * 新增Grid/Scale滑块控制箭头密度和大小
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -17,11 +20,12 @@ import QtQuick3D
 import QtQuick3D.Helpers
 import todraw 1.0
 import "calculator.js" as Calc
+import "vector3d.js" as Vec3D
 
 Item {
     id: contentRoot
     property alias dialogs: _dialogs
-    property alias plotCanvas: plotCanvas//这两个都是为了导出图片
+    property alias plotCanvas: plotCanvas
     property alias graphsContainer: graphsContainer
 
     property int currentGraphMode: 0
@@ -33,6 +37,11 @@ Item {
     property bool needUpdateVector: false
 
     property string function3D:"sin(x)*cos(y)"
+
+    property bool showVectorField3D: false
+    property int vectorGridSize3D: 10
+    property real vectorScale3D: 0.15
+
     Dialogs{id: _dialogs}
 
     Timer{
@@ -208,8 +217,7 @@ Item {
     }
 
     //3D函数管理
-
-    function autoConvertTo3D(expr){ //保证输入一个变量的函数也可以显示
+    function autoConvertTo3D(expr){//保证输入一个变量的函数也可以显示
         if(!expr || expr.trim() === "") return expr;
 
         var t = expr.trim();
@@ -229,6 +237,86 @@ Item {
         return t;
     }
 
+    //生成3D矢量场数据
+    function generate3DVectorField(){
+        var expr = function3D
+        if(!expr || expr.trim() === ""){
+            console.log("3D vector fields:not function!")
+            return []
+        }
+        var gridSize = vectorGridSize3D || 10
+        var arrowScale = vectorScale3D || 0.15
+
+        console.log("3D vector feild generate: gridSize=", gridSize, "expr=", expr, "arrowScale=", arrowScale)
+
+        var result = Vec3D.sampleVectorField3DAuto(expr, gridSize, arrowScale)
+        if(!result || !result.vectors || result.vectors.length === 0){
+            console.log("3D vector field：no data")
+            return []
+        }
+        var vectorData = []
+        var vectors = result.vectors
+        var maxMag = result.maxMagnitude || 1.0
+
+        for(var i=0;i<vectors.length;i++){
+            var v = vectors[i]
+            vectorData.push({
+                                "fromX": v.fromX,
+                                "fromY": v.fromY,
+                                "fromZ": v.fromZ,
+                                "toX": v.toX,
+                                "toY": v.toY,
+                                "toZ": v.toZ,
+                                "color": v.color || Vec3D.getVectorColor3D(v.magnitude, maxMag),
+                                "magnitude": v.magnitude
+                            })
+        }
+
+        console.log("3D vector field generate:", vectorData.length, "arrows")
+        return vectorData
+    }
+    //新增：切换3D矢量场
+    function toggleVectorField3D(show){
+        showVectorField3D = show
+        var view = graph3DLoader.item
+        if(!view){
+            console.log("3D视图未加载，等待...")
+            var waitForView = function(){
+                var v = graph3DLoader.item
+                if(v){
+                    applyVectorField3D(v, show)
+                }else{
+                    Qt.callLater(waitForView, 200)
+                }
+            }
+            Qt.callLater(waitForView, 100)
+            return
+        }
+        applyVectorField3D(view, show)
+    }
+    function applyVectorField3D(view, show){
+        if(show){
+            var arrowData = generate3DVectorField()
+            if(arrowData && arrowData.length > 0){
+                view.setVectorFieldData(arrowData)
+                view.toggleVectorField(true)
+                Qt.callLater(function(){
+                    view.forceSyncVectorField()
+                }, 200)
+                console.log("3D vector filed has opend:", arrowData.length, "arrows")
+            }else{
+                view.toggleVectorField(false)
+                _dialogs.error.open()
+                showVectorField3D = false
+                vectorField3DBtn.checked = false
+            }
+        }else{
+            view.toggleVectorField(false)
+            console.log("3D矢量场已关闭")
+        }
+    }
+
+    //刷新3D视图，新增矢量场处理
     function refresh3DView(){
         graph3DLoader.active = false
         graph3DLoader.active = true
@@ -253,9 +341,25 @@ Item {
             if(funcs.length > 0){
                 view.addFunctions(funcs)
             }
+            //矢量场处理部分
+            if(showVectorField3D){
+                var arrowData = generate3DVectorField()
+                if(arrowData && arrowData.length > 0){
+                    view.setVectorFieldData(arrowData)
+                    view.toggleVectorField(true)
+                    Qt.callLater(view.forceSyncVectorField, 200)
+                    console.log("3Dvector field has shown:", arrowData.length, "arrows")
+                }else{
+                    view.toggleVectorField(false)
+                    console.log("3D vector field has no data")
+                }
+            }else{
+                view.toggleVectorField(false)
+            }
         }
         Qt.callLater(waitAndLoad, 150)
     }
+
 
     function add3DFunction(){
         function3DListModel.append({"expr": ""})
@@ -269,6 +373,7 @@ Item {
 
     function update3DFunction(index, newText){
         function3DListModel.setProperty(index, "expr", newText)
+        function3D = newText
         refresh3DView()
     }
 
@@ -334,7 +439,7 @@ Item {
                         font.pixelSize: 15
                         ToolTip{
                             visible: tooltip2D.hovered
-                            text: "每个函数会画一条曲线，颜色不同\n支持: + - * / ^ ( )\n"
+                            text: "Each function is plotted as a curve,with distinct colors.\ncan support: + - * / ^ ( )\n"
                         }
                         HoverHandler { id: tooltip2D }
                     }
@@ -536,12 +641,91 @@ Item {
                         color: "#cccccc"
                     }
 
+                    //3D矢量场控制
+                    Button{
+                        id: vectorField3DBtn
+                        text: "3D Vector Field"
+                        Layout.fillWidth: true
+                        checkable: true
+                        checked: showVectorField3D
+                        onClicked: toggleVectorField3D(checked)
+                    }
+
+                    // 矢量场参数控制
+                    ColumnLayout{
+                        visible: vectorField3DBtn.checked
+                        spacing: 5
+                        Layout.fillWidth: true
+
+                        RowLayout{
+                            Layout.fillWidth: true
+                            spacing: 5
+                            Label{text:"Grid:"; Layout.preferredWidth:40}
+                            Slider{
+                                id:gridSlider
+                                Layout.fillWidth:true
+                                from:5
+                                to:20
+                                value:vectorGridSize3D
+                                stepSize:1
+                                onValueChanged:{
+                                    vectorGridSize3D = value
+                                    if(showVectorField3D){
+                                        var view = graph3DLoader.item
+                                        if(view){
+                                            var arrowData = generate3DVectorField()
+                                            if(arrowData && arrowData.length > 0){
+                                                view.setVectorFieldData(arrowData)
+                                                Qt.callLater(function(){
+                                                    view.forceSyncVectorField()
+                                                }, 100)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            Label{text:gridSlider.value.toFixed(0); Layout.preferredWidth:30}
+                        }
+
+                        RowLayout{
+                            Layout.fillWidth: true
+                            spacing: 5
+                            Label{text:"Scale:"; Layout.preferredWidth:40}
+                            Slider{
+                                id:scaleSlider
+                                Layout.fillWidth:true
+                                from:5
+                                to:50
+                                value:vectorScale3D * 100
+                                stepSize:1
+                                onValueChanged:{
+                                    vectorScale3D = value / 100
+                                    if(showVectorField3D){
+                                        var view = graph3DLoader.item
+                                        if(view){
+                                            var arrowData = generate3DVectorField()
+                                            if(arrowData && arrowData.length > 0){
+                                                view.setVectorFieldData(arrowData)
+                                                Qt.callLater(function(){view.forceSyncVectorField()}, 100)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            Label{text:(scaleSlider.value/100).toFixed(2); Layout.preferredWidth:30}
+                        }
+                    }
+
+                    Rectangle{
+                        Layout.fillWidth: true
+                        height: 1
+                        color: "#cccccc"
+                    }
                     Label{
                         text: "3D View Control"
                         font.bold: true
                         font.pixelSize: 14
                     }
-
                     RowLayout{
                         Layout.fillWidth: true
                         spacing: 10
@@ -682,12 +866,22 @@ Item {
                             if(validFunctions.length > 0){
                                 graph3DWrapper.addFunctions(validFunctions)
                             }
+                            // 如果矢量场已开启，加载矢量场
+                            if(showVectorField3D){
+                                var arrowData = generate3DVectorField()
+                                if(arrowData && arrowData.length > 0){
+                                    graph3DWrapper.setVectorFieldData(arrowData)
+                                    graph3DWrapper.toggleVectorField(true)
+                                    graph3DWrapper.forceSyncVectorField()
+                                }
+                            }
                         }
                     }
                 }
             }
         }
     }
+
 
     Component.onCompleted:{
         currentGraphMode = 0

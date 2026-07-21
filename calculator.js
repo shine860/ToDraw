@@ -440,3 +440,19 @@ function vecColor(magnitude, maxMagnitude) {
     if (t < 0.8) return "orange";
     return "red";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
