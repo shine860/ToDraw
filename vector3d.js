@@ -453,30 +453,31 @@ function produceImplicitVecField(expr,gridSize,arrowScale){
 
 function generateBallVectorField(radius){
     var arrows=[];
-    var nTheta=8;//纬度
-    var nPhi=12;//经度
+    var numArrows=96;  // 总箭头数
     var arrowLen=radius*0.25;
-    for(var ti=0;ti<nTheta;ti++){
-        var theta=(ti+0.5)*Math.PI/nTheta;
-        for(var pi=0;pi<nPhi;pi++){
-            var phi=pi*2*Math.PI/nPhi;
-            var x=radius*Math.sin(theta)*Math.cos(phi);
-            var y=radius*Math.sin(theta)*Math.sin(phi);
-            var z=radius*Math.cos(theta);
-            var len=arrowLen*(0.4+0.6*Math.sin(theta));
-            var dx=(x/radius)*len;
-            var dy=(y/radius)*len;
-            var dz=(z/radius)*len;
-            var mag=1.0;
-            arrows.push({
-                            fromX:x,fromY:y,fromZ:z,
-                            toX:x+dx,toY:y+dy,toZ:z+dz,
-                            color:getVectorColor3D(mag,2.0),
-                            magnitude:mag
-                        });
-        }
+    var goldenRatio=(1+Math.sqrt(5))/2;
+
+    for(var i=0;i<numArrows;i++){
+        var theta=Math.acos(1-2*(i+0.5)/numArrows);
+        var phi=2*Math.PI*i/goldenRatio;
+
+        var x=radius*Math.sin(theta)*Math.cos(phi);
+        var y=radius*Math.sin(theta)*Math.sin(phi);
+        var z=radius*Math.cos(theta);
+
+        var len=arrowLen;
+        var dx=(x/radius)*len;
+        var dy=(y/radius)*len;
+        var dz=(z/radius)*len;
+        var mag=1.0;
+        arrows.push({
+            fromX:x,fromY:y,fromZ:z,
+            toX:x+dx,toY:y+dy,toZ:z+dz,
+            color:getVectorColor3D(mag,2.0),
+            magnitude:mag
+        });
     }
-    console.log("Ball surface vector feild has:",arrows.length,"arrows");
+    console.log("Ball surface vector field has:",arrows.length,"arrows");
     return {vectors:arrows,maxMagnitude:1.0};
 }
 
