@@ -9,22 +9,38 @@
   3D 绘图:基于 Analitza 库的 3D 曲面绘制，多函数叠加显示，鼠标拖拽旋转视角 ，滚轮缩放，3D 矢量场叠加（显式函数），隐式函数矢量场，球面矢量场自动识别
 ## 4.项目结构
 todraw/
-├── CMakeLists.txt        
-├── main.cpp               
+
+├── CMakeLists.txt   
+
+├── main.cpp       
+
 ├── Window.qml              # 主窗口
+
 ├── Content.qml             # 核心内容布局与逻辑
+
 ├── Actions.qml             # 全局动作定义
+
 ├── Dialogs.qml             # 对话框集合
+
 ├── Graph3DViewWrapper.qml  # 3D视图
+
 ├── calculator.js           # 2D数学表达式解析引擎
+
 ├── vector3d.js             # 3D矢量场计算引擎
+
 ├── todraw.js               # 控制器辅助函数
+
 ├── my2dcanvas.h            # 2D画布头文件
+
 ├── my2dcanvas.cpp          # 2D画布实现
+
 ├── my2dcanvasrenderer.h    # 2D渲染器头文件
+
 └── my2dcanvasrenderer.cpp  # 2D渲染器实现
+
 ## 5.安装相关库
 '''bash
+
 pacman -S analitza
 ## 6.体验功能
   克隆之后又一个可执行文件，可以进行执行尝试效果
